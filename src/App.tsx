@@ -1,11 +1,28 @@
-import { useState, useMemo, useCallback, useRef } from 'react';
-import ShadcnPreview from './templates/shadcn/PreviewTemplate';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { templates, getTemplate } from './templates/registry';
 import { parseMarkdown } from './parser/markdown-parser';
 import { DEFAULT_MARKDOWN } from './data/default-markdown';
 
+const STORAGE_KEY = 'md-resume:markdown';
+const TEMPLATE_KEY = 'md-resume:template';
+
+function loadMarkdown() {
+  try {
+    return localStorage.getItem(STORAGE_KEY) || DEFAULT_MARKDOWN;
+  } catch {
+    return DEFAULT_MARKDOWN;
+  }
+}
+
 function App() {
-  const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
+  const [markdown, setMarkdown] = useState(loadMarkdown);
+  const [templateId, setTemplateId] = useState(
+    () => localStorage.getItem(TEMPLATE_KEY) || 'shadcn'
+  );
   const previewRef = useRef<HTMLDivElement>(null);
+
+  const template = getTemplate(templateId);
+  const PreviewComponent = template.component;
 
   const resumeData = useMemo(() => {
     try {
@@ -16,6 +33,18 @@ function App() {
   }, [markdown]);
 
   const charCount = markdown.replace(/\s/g, '').length;
+
+  // 自动保存到 localStorage（500ms 防抖）
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try { localStorage.setItem(STORAGE_KEY, markdown); } catch {}
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [markdown]);
+
+  useEffect(() => {
+    try { localStorage.setItem(TEMPLATE_KEY, templateId); } catch {}
+  }, [templateId]);
 
   const handleExportPdf = useCallback(() => {
     if (!previewRef.current) return;
@@ -98,13 +127,35 @@ function App() {
         padding: '8px 16px', background: '#09090b',
         borderBottom: '1px solid #27272a',
       }}>
-        <span style={{
-          fontSize: '14px', fontWeight: 700, color: '#fafafa',
-          fontFamily: '"JetBrains Mono", monospace',
-          letterSpacing: '-0.02em',
-        }}>
-          md-resume
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{
+            fontSize: '14px', fontWeight: 700, color: '#fafafa',
+            fontFamily: '"JetBrains Mono", monospace',
+            letterSpacing: '-0.02em',
+          }}>
+            md-resume
+          </span>
+          <div style={{ display: 'flex', gap: '4px', padding: '2px', borderRadius: '6px', background: '#27272a' }}>
+            {templates.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => !t.disabled && setTemplateId(t.id)}
+                style={{
+                  padding: '3px 10px', borderRadius: '4px', border: 'none',
+                  fontSize: '11px', fontWeight: 500,
+                  fontFamily: '"JetBrains Mono", monospace',
+                  cursor: t.disabled ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.15s',
+                  background: templateId === t.id ? '#fafafa' : 'transparent',
+                  color: t.disabled ? '#52525b' : templateId === t.id ? '#18181b' : '#a1a1aa',
+                  opacity: t.disabled ? 0.5 : 1,
+                }}
+              >
+                {t.name}{t.disabled ? ' ⏳' : ''}
+              </button>
+            ))}
+          </div>
+        </div>
         <button
           onClick={handleExportPdf}
           style={{
@@ -163,7 +214,7 @@ function App() {
           width: '50%', overflow: 'auto', background: '#f4f4f5',
         }}>
           <div ref={previewRef}>
-            <ShadcnPreview data={resumeData} />
+            <PreviewComponent data={resumeData} />
           </div>
         </div>
       </div>
