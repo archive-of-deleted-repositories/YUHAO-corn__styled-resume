@@ -16,7 +16,14 @@ A: 纯前端 SPA。所有逻辑跑在浏览器端，无需后端。Markdown 解�
 A: React 18 + Vite + TypeScript + Tailwind CSS。
 
 **Q: PDF 导出方案？**
-A: `@react-pdf/renderer`。用 React 原语直接生成原生 PDF，文字可选中/搜索，质量最高。代价是需要用 react-pdf 的组件体系重写一套渲染逻辑，模板需要维护 HTML 预览 + PDF 两套组件。两套组件共享同一份 `ResumeData` 结构化数据。
+A: ~~`@react-pdf/renderer`~~ → 改为 `window.print()` + `@media print` CSS。
+
+**变更原因：** @react-pdf/renderer 的 CSS 兼容性差（border 简写不支持、rgba() 不支持），导致 PDF 输出与 HTML 预览视觉差异大，需要维护两套模板且难以保证一致性。
+
+**最终方案：** 打开一个只包含简历预览的新窗口，自动触发 `window.print()`，用户在浏览器打印对话框中选"另存为 PDF"。
+- 优点：视觉与预览 100% 一致（复用同一套 HTML/CSS 渲染），文字可选中/搜索，只需维护一套模板
+- 缺点：用户需在打印对话框中手动点"另存为 PDF"（多一步操作）
+- 实现：新窗口加载简历 HTML + `@media print` 样式优化（隐藏动画、调整边距等）→ 自动调用 `window.print()`
 
 **Q: 编辑器交互形态？**
 A: 左右分栏 — 左边 Markdown 编辑，右边实时预览。经典的所见即所得体验。
@@ -45,7 +52,7 @@ A: 无内容则隐藏，有内容则展示。Markdown 中无 `## 附录` section
 图片来源为外部 URL 或 base64 data URL（纯前端无文件上传服务器）。
 
 **Q: 模板策略？**
-A: 先做一个 shadcn 风格模板（还原现有 prototype），架构上预留模板切换能力。后期增加 claude 风格模板。模板通过 registry 注册，新增模板只需注册 `{ id, name, PreviewComponent, PdfComponent }`。
+A: 先做一个 shadcn 风格模板（还原现有 prototype），架构上预留模板切换能力。后期增加 claude 风格模板。模板通过 registry 注册，新增模板只需注册 `{ id, name, PreviewComponent }`。PDF 导出复用 PreviewComponent（通过 window.print），无需单独的 PDF 组件。
 
 ---
 
@@ -53,31 +60,28 @@ A: 先做一个 shadcn 风格模板（还原现有 prototype），架构上预�
 
 **数据流：**
 ```
-Markdown 文本 → 解析器 (parser) → ResumeData 结构化数据 → HTML 模板组件（预览）
-                                                         → react-pdf 模板组件（PDF）
+Markdown 文本 → 解析器 (parser) → ResumeData 结构化数据 → HTML 模板组件（预览 + PDF 共用）
 ```
 
 **项目结构：**
 ```
 src/
-├── App.tsx                    # 主布局：左右分栏
+├── App.tsx                    # 主布局：Toolbar + 左右分栏
 ├── main.tsx                   # 入口
 ├── types/
 │   └── resume.ts              # ResumeData 类型定义
 ├── parser/
-│   └── markdown-parser.ts     # Markdown → ResumeData 解析器
+│   └── markdown-parser.ts     # Markdown → ResumeData 解析器（纯字符串，零依赖）
+├── data/
+│   ├── sample.ts              # 示例 ResumeData（硬编码，用于测试）
+│   └── default-markdown.ts    # 默认 Markdown 内容
 ├── templates/
-│   ├── registry.ts            # 模板注册表（支持切换）
+│   ├── registry.ts            # 模板注册表（支持切换，预留）
 │   └── shadcn/
-│       ├── PreviewTemplate.tsx # HTML/CSS 预览组件
-│       └── PdfTemplate.tsx    # @react-pdf/renderer PDF 组件
-├── components/
-│   ├── Editor.tsx             # textarea 编辑器
-│   ├── Preview.tsx            # 预览容器
-│   ├── PdfExport.tsx          # PDF 下载按钮 + 生成逻辑
-│   └── TemplateSelector.tsx   # 模板选择器（预留）
+│       ├── PreviewTemplate.tsx # HTML/CSS 预览组件（PDF 也复用此组件）
+│       └── icons.tsx          # SVG 图标组件
 └── hooks/
-    └── useResumeData.ts       # Markdown → 解析 → 状态管理
+    └── useResumeData.ts       # Markdown → 解析 → 状态管理（预留）
 ```
 
 **核心类型：**
@@ -132,10 +136,8 @@ interface AppendixItem {
 
 **依赖清单：**
 - react + react-dom
-- @react-pdf/renderer
-- gray-matter（解析 YAML frontmatter）
-- unified + remark-parse（解析 Markdown AST）
-- tailwindcss
+- tailwindcss + @tailwindcss/vite
+- 无其他外部依赖（Markdown 解析器为纯字符串处理，零依赖）
 
 ---
 
@@ -206,7 +208,7 @@ A: 直接复用 `resume.jsx` 的代码，不是"参考重写"。把 JSX 结构�
 **Q: 开发策略？**
 A: 采用 Vertical Slice 开发。先验证最核心的视觉输出，再逐步扩展功能。每个 slice 交付一个可验收的完整功能切片。
 
-### Slice 1: 预览渲染（验证视觉还原）
+### Slice 1: 预览渲染（验证视觉还原） ✅ 已完成
 - 搭建 Vite + React + TypeScript 项目骨架
 - 定义 `ResumeData` 类型（types/resume.ts）
 - 将 resume.jsx 重构为 `ShadcnPreview` 组件，接收 `ResumeData` props
@@ -214,17 +216,19 @@ A: 采用 Vertical Slice 开发。先验证最核心的视觉输出，再逐步�
 - 用硬编码的示例数据（与 resume.jsx 中 RESUME_DATA 一致）驱动渲染
 - **验收标准：浏览器中渲染效果与 resume.jsx prototype 完全一致**
 
-### Slice 2: Markdown 解析 + 编辑器
-- 实现 Markdown 解析器（gray-matter + remark）
+### Slice 2: Markdown 解析 + 编辑器 ✅ 已完成
+- 实现 Markdown 解析器（纯字符串处理，零外部依赖，替换了 gray-matter/remark）
 - 编写示例 Markdown（覆盖所有 section）
 - 添加 textarea 编辑器 + 左右分栏布局
 - 接通数据流：textarea → parser → ShadcnPreview
-- **验收标准：编辑 Markdown 后右侧预览实时更新，内容正确**
+- **验收标准：编辑 Markdown 后右侧预览实时更新，内容正确** ✅
 
-### Slice 3: PDF 导出
-- 用 @react-pdf/renderer 重写 `ShadcnPdf` 模板组件
-- 实现下载按钮 + PDF 生成逻辑
-- **验收标准：点击下载生成 PDF，文字可选中，排版与预览基本一致**
+### Slice 3: PDF 导出（方案已变更）
+- ~~用 @react-pdf/renderer 重写模板~~ → 改为 window.print() + @media print
+- 实现：点击"下载 PDF"按钮 → 打开新窗口（只含简历预览）→ 自动触发 window.print()
+- 添加 @media print CSS：隐藏动画、去掉阴影/圆角、调整 A4 边距、隐藏 hover 效果
+- 删除 @react-pdf/renderer 依赖和 PdfTemplate.tsx
+- **验收标准：打印预览中简历排版正确，文字可选中，样式干净**
 
 ### Slice 4: 收尾打磨
 - localStorage 自动保存 + 恢复
