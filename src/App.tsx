@@ -23,23 +23,71 @@ function App() {
     if (!printWindow) return;
 
     const previewHtml = previewRef.current.innerHTML;
+    const title = `${resumeData.header.name || 'Resume'}-简历`;
+
     printWindow.document.write(`<!DOCTYPE html>
-<html><head>
+<html>
+<head>
 <meta charset="utf-8">
-<title>${resumeData.header.name || 'Resume'}-简历</title>
+<title>${title}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  @media print {
-    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .resume-card { box-shadow: none !important; border: none !important; border-radius: 0 !important; }
+
+  @page {
+    size: 210mm 297mm;
+    margin: 0;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    width: 210mm;
+  }
+
+  /* 外层容器：去掉 100vh、渐变、padding */
+  body > div {
+    min-height: auto !important;
+    background: white !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  /* 卡片：撑满宽度，去掉装饰 */
+  .resume-card {
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 禁用所有动画 */
+  .resume-card,
+  .section-block,
+  .bullet-item {
+    animation: none !important;
   }
 </style>
-</head><body>${previewHtml}</body></html>`);
+</head>
+<body>${previewHtml}</body>
+</html>`);
     printWindow.document.close();
-    printWindow.onload = () => {
+
+    const triggerPrint = () => {
+      // 量出内容实际高度，动态设置页面尺寸，实现单页连续 PDF
+      const contentHeight = printWindow.document.body.scrollHeight;
+      const heightMm = Math.ceil(contentHeight * 25.4 / 96) + 1; // px → mm，+1 防止四舍五入截断
+      const pageStyle = printWindow.document.createElement('style');
+      pageStyle.textContent = `@page { size: 210mm ${heightMm}mm; margin: 0; }`;
+      printWindow.document.head.appendChild(pageStyle);
       printWindow.print();
     };
+
+    if (printWindow.document.fonts) {
+      printWindow.document.fonts.ready.then(triggerPrint);
+    } else {
+      printWindow.onload = () => setTimeout(triggerPrint, 500);
+    }
   }, [resumeData]);
 
   return (
