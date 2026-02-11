@@ -27,29 +27,32 @@ function SectionHeader({ icon, title }: { icon: React.ReactNode; title: string }
   );
 }
 
-function ContactChipDark({ icon, text }: { icon: React.ReactNode; text: string }) {
+function ContactChipDark({ icon, text, href }: { icon: React.ReactNode; text: string; href?: string }) {
+  const Tag = href ? "a" : "span";
   return (
-    <span
+    <Tag
+      {...(href ? { href, target: "_blank", rel: "noopener noreferrer" } : {})}
       style={{
         display: "inline-flex", alignItems: "center", gap: "6px",
         padding: "5px 12px", borderRadius: "6px",
         border: "1px solid rgba(255,255,255,0.1)",
         fontSize: "12.5px", color: "#a1a1aa",
         background: "rgba(255,255,255,0.05)",
-        cursor: "default", transition: "all 0.15s",
+        cursor: href ? "pointer" : "default", transition: "all 0.15s",
+        textDecoration: "none",
       }}
-      onMouseEnter={(e) => {
+      onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
         e.currentTarget.style.background = "rgba(255,255,255,0.1)";
         e.currentTarget.style.color = "#e4e4e7";
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
         e.currentTarget.style.background = "rgba(255,255,255,0.05)";
         e.currentTarget.style.color = "#a1a1aa";
       }}
     >
       <span style={{ display: "flex", color: "#71717a" }}>{icon}</span>
       {text}
-    </span>
+    </Tag>
   );
 }
 
@@ -129,10 +132,10 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
               )}
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "20px" }}>
-              {d.header.github && <ContactChipDark icon={<GithubIcon />} text={d.header.github} />}
-              {d.header.website && <ContactChipDark icon={<GlobeIcon />} text={d.header.website} />}
-              {d.header.phone && <ContactChipDark icon={<PhoneIcon />} text={d.header.phone} />}
-              {d.header.email && <ContactChipDark icon={<MailIcon />} text={d.header.email} />}
+              {d.header.github && <ContactChipDark icon={<GithubIcon />} text={d.header.github} href={`https://${d.header.github}`} />}
+              {d.header.website && <ContactChipDark icon={<GlobeIcon />} text={d.header.website} href={d.header.website.startsWith("http") ? d.header.website : `https://${d.header.website}`} />}
+              {d.header.phone && <ContactChipDark icon={<PhoneIcon />} text={d.header.phone} href={`tel:${d.header.phone.replace(/[-\s]/g, "")}`} />}
+              {d.header.email && <ContactChipDark icon={<MailIcon />} text={d.header.email} href={`mailto:${d.header.email}`} />}
             </div>
           </div>
         </div>
