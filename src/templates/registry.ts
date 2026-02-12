@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
 import type { ResumeData } from "../types/resume";
 import ShadcnPreview from "./shadcn/PreviewTemplate";
+import ClaudePreview from "./claude/PreviewTemplate";
+import TerminalPreview from "./terminal/PreviewTemplate";
+import EditorialPreview from "./editorial/PreviewTemplate";
 
 export interface Template {
   id: string;
@@ -11,7 +14,9 @@ export interface Template {
 
 export const templates: Template[] = [
   { id: "shadcn", name: "Shadcn", component: ShadcnPreview },
-  { id: "claude", name: "Claude", component: ShadcnPreview, disabled: true },
+  { id: "claude", name: "Claude", component: ClaudePreview },
+  { id: "terminal", name: "Terminal", component: TerminalPreview },
+  { id: "editorial", name: "Editorial", component: EditorialPreview },
 ];
 
 export const getTemplate = (id: string) =>
