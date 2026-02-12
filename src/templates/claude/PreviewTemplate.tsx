@@ -201,7 +201,7 @@ export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeDat
         </div>
 
         {/* Footer */}
-        <div className="cl-footer">
+        <div className="cl-footer resume-footer">
           CRAFTED WITH CLAUDE STYLE
           <span className="cl-dot" />
           2026

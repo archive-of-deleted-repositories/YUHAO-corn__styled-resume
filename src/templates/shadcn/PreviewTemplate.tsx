@@ -364,7 +364,7 @@ export default function ShadcnPreview({ data, locale = 'en' }: { data: ResumeDat
         </div>
 
         {/* FOOTER */}
-        <div style={{
+        <div className="resume-footer" style={{
           padding: "16px 36px", borderTop: "1px solid #e4e4e7",
           display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fafafa",
         }}>

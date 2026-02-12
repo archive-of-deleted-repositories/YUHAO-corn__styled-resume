@@ -126,6 +126,11 @@ function App() {
   .bullet-item {
     animation: none !important;
   }
+
+  /* 隐藏模板 footer */
+  .resume-footer {
+    display: none !important;
+  }
 </style>
 </head>
 <body>${previewHtml}</body>
