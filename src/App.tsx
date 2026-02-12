@@ -213,7 +213,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            {locale === 'zh' ? '🌐 EN' : '🌐 中'}
+            {locale === 'zh' ? 'EN' : '中'}
           </button>
           <button
             onClick={handleShareLink}

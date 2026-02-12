@@ -24,6 +24,14 @@ const messages: Record<Locale, Record<string, string>> = {
     period: '时间',
     // Claude template
     askExperience: '工作经历呢？',
+    askIntro: '介绍一下你自己吧 👋',
+    askProjects: '有什么代表性项目吗？',
+    askAppendix: '有没有想展示的附加材料？',
+    thanksReading: '感谢阅读',
+    // Shared
+    imgPlaceholder: '在 Markdown 中使用 ![alt](url) 插入图片',
+    imgPasteHere: '在此处粘贴图片',
+    techStack: '技术栈',
   },
   en: {
     // UI
@@ -48,6 +56,14 @@ const messages: Record<Locale, Record<string, string>> = {
     period: 'Period',
     // Claude template
     askExperience: 'What about work experience?',
+    askIntro: 'Tell me about yourself 👋',
+    askProjects: 'Any notable projects?',
+    askAppendix: 'Any additional materials to share?',
+    thanksReading: 'Thanks for reading',
+    // Shared
+    imgPlaceholder: 'Use ![alt](url) in Markdown to insert image',
+    imgPasteHere: 'Paste image here',
+    techStack: 'Tech Stack',
   },
 };
 

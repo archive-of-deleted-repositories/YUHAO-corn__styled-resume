@@ -349,8 +349,8 @@ export default function ShadcnPreview({ data, locale = 'en' }: { data: ResumeDat
                           color: "#a1a1aa", gap: "10px", border: "2px dashed #e4e4e7",
                         }}>
                           <ImagePlaceholderIcon />
-                          <span style={{ fontSize: "12.5px", fontWeight: 500 }}>在此处粘贴图片</span>
-                          <span style={{ fontSize: "11px", color: "#d4d4d8" }}>在 Markdown 中使用 ![alt](url) 插入图片</span>
+                          <span style={{ fontSize: "12.5px", fontWeight: 500 }}>{t('imgPasteHere', locale)}</span>
+                          <span style={{ fontSize: "11px", color: "#d4d4d8" }}>{t('imgPlaceholder', locale)}</span>
                         </div>
                       ) : (
                         <img src={item.imageUrl} alt={item.title} style={{ width: "100%", borderRadius: "6px", display: "block" }} />

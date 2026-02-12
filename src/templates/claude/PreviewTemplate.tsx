@@ -58,7 +58,7 @@ export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeDat
         </div>
 
         {/* User: intro prompt */}
-        <UserBubble text="介绍一下你自己吧 👋" />
+        <UserBubble text={t('askIntro', locale)} />
 
         {/* Header */}
         <div className="cl-block cl-msg-claude">
@@ -86,7 +86,7 @@ export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeDat
         {/* Projects */}
         {d.projects && d.projects.length > 0 && (
           <>
-            <UserBubble text="有什么代表性项目吗？" />
+            <UserBubble text={t('askProjects', locale)} />
             <div className="cl-block cl-msg-claude">
               <ClaudeAvatar />
               <SectionLabel title={t('projects', locale)} />
@@ -172,7 +172,7 @@ export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeDat
         {/* Appendix */}
         {d.appendix && d.appendix.length > 0 && (
           <>
-            <UserBubble text="有没有想展示的附加材料？" />
+            <UserBubble text={t('askAppendix', locale)} />
             <div className="cl-block cl-msg-claude">
               <ClaudeAvatar />
               <SectionLabel title={t('appendix', locale)} />
@@ -181,7 +181,7 @@ export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeDat
                   {item.imageUrl ? (
                     <img src={item.imageUrl} alt={item.title} className="cl-appendix-img" />
                   ) : (
-                    <div className="cl-appendix-img-placeholder">📊 在 Markdown 中使用 ![alt](url) 插入图片</div>
+                    <div className="cl-appendix-img-placeholder">📊 {t('imgPlaceholder', locale)}</div>
                   )}
                   <div className="cl-appendix-body">
                     <div className="cl-appendix-name">{item.title}</div>
@@ -196,7 +196,7 @@ export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeDat
         {/* End cursor */}
         <div className="cl-block cl-msg-claude">
           <div className="cl-end-line">
-            感谢阅读<span className="cl-cursor-blink" />
+            {t('thanksReading', locale)}<span className="cl-cursor-blink" />
           </div>
         </div>
 

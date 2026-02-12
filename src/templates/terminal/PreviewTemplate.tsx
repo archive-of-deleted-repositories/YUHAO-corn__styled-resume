@@ -163,7 +163,7 @@ export default function TerminalPreview({ data, locale = 'en' }: { data: ResumeD
               <hr className="tm-divider" />
               <Prompt path="~" cmd="neofetch" flags="--skills" />
               <div className="tm-output">
-                <SectionHeader title="技术栈" />
+                <SectionHeader title={t('techStack', locale)} />
                 <div className="tm-tags">
                   {d.skills.map((s, i) => <span key={i} className="tm-tag">{s}</span>)}
                 </div>
@@ -186,7 +186,7 @@ export default function TerminalPreview({ data, locale = 'en' }: { data: ResumeD
                       {item.imageUrl ? (
                         <img src={item.imageUrl} alt={item.title} />
                       ) : (
-                        <div className="tm-appendix-placeholder">[ 在 Markdown 中使用 ![alt](url) 插入图片 ]</div>
+                        <div className="tm-appendix-placeholder">[ {t('imgPlaceholder', locale)} ]</div>
                       )}
                     </div>
                   </div>
