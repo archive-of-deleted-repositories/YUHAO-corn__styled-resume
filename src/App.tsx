@@ -204,15 +204,16 @@ function App() {
           <button
             onClick={handleToggleLocale}
             style={{
-              padding: '3px 10px', borderRadius: '4px',
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', borderRadius: '6px',
               border: '1px solid #3f3f46',
               background: 'transparent', color: '#a1a1aa',
-              fontSize: '11px', fontWeight: 600, cursor: 'pointer',
+              fontSize: '12px', fontWeight: 600, cursor: 'pointer',
               fontFamily: '"JetBrains Mono", monospace',
               transition: 'all 0.15s',
             }}
           >
-            {locale === 'zh' ? 'EN' : '中'}
+            {locale === 'zh' ? '🌐 EN' : '🌐 中'}
           </button>
           <button
             onClick={handleShareLink}
