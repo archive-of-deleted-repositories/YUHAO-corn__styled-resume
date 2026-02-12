@@ -8,8 +8,7 @@
 
 [English](README.md)
 
-<!-- TODO: 添加在线 Demo 链接 -->
-<!-- [在线体验](https://your-demo-url.com) -->
+[在线体验](https://styled-resume.pages.dev)
 
 ## 预览
 

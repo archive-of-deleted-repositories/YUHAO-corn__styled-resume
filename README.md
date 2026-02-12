@@ -8,8 +8,7 @@ Write in Markdown. Get a beautifully designed resume.
 
 [中文文档](README.zh-CN.md)
 
-<!-- TODO: Add demo link -->
-<!-- [Live Demo](https://your-demo-url.com) -->
+[Live Demo](https://styled-resume.pages.dev)
 
 ## Preview
 
