@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { getTemplate } from '../templates/registry';
+import { t } from '../i18n';
 import type { ResumeData } from '../types/resume';
 
 interface ViewModeProps {
@@ -34,7 +35,7 @@ export default function ViewMode({ templateId, data }: ViewModeProps) {
           href={window.location.origin + window.location.pathname}
           style={{ color: '#71717a', textDecoration: 'none' }}
         >
-          使用 styled-resume 制作你的简历
+          {t('viewFooter')}
         </a>
       </footer>
     </div>

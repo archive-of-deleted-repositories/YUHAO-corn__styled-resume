@@ -1,4 +1,6 @@
-export const DEFAULT_MARKDOWN = `---
+import { locale } from '../i18n';
+
+const ZH_MARKDOWN = `---
 name: 张三
 title: 产品经理
 phone: "+86 138-0000-0000"
@@ -69,3 +71,77 @@ status: Open to work
 ### 用户增长数据看板截图
 核心业务指标 Dashboard，展示关键增长曲线
 `;
+
+const EN_MARKDOWN = `---
+name: Jane Smith
+title: Product Manager
+phone: "+1 555-000-1234"
+email: jane@example.com
+github: github.com/janesmith
+website: janesmith.dev
+status: Open to work
+---
+
+## Summary
+
+Product manager with 5 years of experience building internet products from 0 to 1. Led multiple SaaS products serving millions of users, with deep expertise in user growth, data-driven decision making, and cross-functional collaboration.
+
+## Projects
+
+### AI Customer Support Platform | github.com/janesmith/ai-support
+> LLM-powered customer support system with multi-turn dialogue and intent recognition
+- Led end-to-end product design: user research, competitive analysis, PRD, and prototyping
+- Designed multi-turn dialogue engine achieving 92% intent recognition accuracy
+- Built analytics dashboard, increasing daily ticket throughput by 180%
+- Coordinated frontend, backend, and ML teams to deliver 3 major releases on schedule
+
+\`React\` \`Node.js\` \`Python\` \`LangChain\` \`PostgreSQL\`
+
+### SaaS Collaboration Tool | github.com/janesmith/collab-tool
+> Project management and document collaboration platform for small teams
+- Owned core module design: task boards, document collaboration, and permission system
+- Improved user retention by 35% through user interviews and data analysis
+- Designed plugin architecture supporting third-party integrations
+
+\`Next.js\` \`Tailwind CSS\` \`Supabase\`
+
+## Experience
+
+### ByteDance | Senior Product Manager | Mar 2022 – Present
+> Enterprise SaaS product line planning and execution
+- Led B2B product strategy, growing annual ARR by 200%
+- Established product metrics framework, driving data-informed culture
+- Managed a team of 5 PMs, setting quarterly OKRs and tracking execution
+- Partnered with sales and customer success to build feedback loops
+
+### Alibaba | Product Manager | Jun 2020 – Feb 2022
+> E-commerce platform module design and optimization
+- Designed product catalog and order management modules handling 1M+ daily orders
+- Drove search and recommendation optimization, improving CTR by 25%
+- Led UX upgrade initiative, increasing NPS by 15 points
+
+### Meituan | Product Intern | Jul 2019 – Dec 2019
+
+## Education
+
+### Peking University | M.S. | Information Management | Sep 2018 – Jun 2020
+### Wuhan University | B.S. | Computer Science | Sep 2014 – Jun 2018
+
+## Skills
+
+- Product Design & Prototyping (Figma / Axure / Sketch)
+- Data Analysis (SQL / Python / Tableau / Google Analytics)
+- Technical Understanding (REST API / Microservices / Frontend & Backend)
+- Project Management (Scrum / JIRA / Notion / Linear)
+- AI & LLM Applications (Prompt Engineering / RAG / Agent Design)
+
+## Appendix
+
+### Architecture Diagram — AI Support Platform
+System architecture overview showing core module interactions
+
+### Growth Dashboard Screenshot
+Key business metrics dashboard with growth curves
+`;
+
+export const DEFAULT_MARKDOWN = locale === 'zh' ? ZH_MARKDOWN : EN_MARKDOWN;

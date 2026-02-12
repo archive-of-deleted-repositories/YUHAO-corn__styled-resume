@@ -4,6 +4,7 @@ import { parseMarkdown } from './parser/markdown-parser';
 import { DEFAULT_MARKDOWN } from './data/default-markdown';
 import { isViewMode, decodeShareUrl, encodeShareUrl } from './utils/share';
 import { exportHtml } from './utils/export-html';
+import { t } from './i18n';
 import ViewMode from './components/ViewMode';
 
 const STORAGE_KEY = 'styled-resume:markdown';
@@ -138,7 +139,7 @@ function App() {
   const handleShareLink = useCallback(() => {
     const url = encodeShareUrl(templateId, resumeData);
     navigator.clipboard.writeText(url).then(() => {
-      setToast('链接已复制到剪贴板');
+      setToast(t('linkCopied'));
       setTimeout(() => setToast(''), 2000);
     });
   }, [templateId, resumeData]);
@@ -193,7 +194,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            分享链接
+            {t('shareLink')}
           </button>
           <button
             onClick={handleExportHtml}
@@ -207,7 +208,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            导出 HTML
+            {t('exportHtml')}
           </button>
           <button
             onClick={handleExportPdf}
@@ -220,7 +221,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            下载 PDF
+            {t('exportPdf')}
           </button>
         </div>
       </div>
@@ -240,13 +241,13 @@ function App() {
               fontSize: '13px', fontWeight: 600, color: '#a1a1aa',
               fontFamily: '"JetBrains Mono", monospace',
             }}>
-              resume.md
+              {t('editorLabel')}
             </span>
             <span style={{
               fontSize: '11px', color: '#52525b',
               fontFamily: '"JetBrains Mono", monospace',
             }}>
-              {charCount} 字
+              {t('charCount', { n: charCount })}
             </span>
           </div>
           <textarea
