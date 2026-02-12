@@ -2,6 +2,9 @@ import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { templates, getTemplate } from './templates/registry';
 import { parseMarkdown } from './parser/markdown-parser';
 import { DEFAULT_MARKDOWN } from './data/default-markdown';
+import { isViewMode, decodeShareUrl, encodeShareUrl } from './utils/share';
+import { exportHtml } from './utils/export-html';
+import ViewMode from './components/ViewMode';
 
 const STORAGE_KEY = 'md-resume:markdown';
 const TEMPLATE_KEY = 'md-resume:template';
@@ -15,10 +18,17 @@ function loadMarkdown() {
 }
 
 function App() {
+  // View mode: render shared resume without editor
+  const [viewPayload] = useState(() => isViewMode() ? decodeShareUrl(window.location.hash) : null);
+  if (viewPayload) {
+    return <ViewMode templateId={viewPayload.t} data={viewPayload.d} />;
+  }
+
   const [markdown, setMarkdown] = useState(loadMarkdown);
   const [templateId, setTemplateId] = useState(
     () => localStorage.getItem(TEMPLATE_KEY) || 'shadcn'
   );
+  const [toast, setToast] = useState('');
   const previewRef = useRef<HTMLDivElement>(null);
 
   const template = getTemplate(templateId);
@@ -119,6 +129,20 @@ function App() {
     }
   }, [resumeData]);
 
+  const handleExportHtml = useCallback(() => {
+    if (!previewRef.current) return;
+    const title = `${resumeData.header.name || 'Resume'}-简历`;
+    exportHtml(previewRef.current, title);
+  }, [resumeData]);
+
+  const handleShareLink = useCallback(() => {
+    const url = encodeShareUrl(templateId, resumeData);
+    navigator.clipboard.writeText(url).then(() => {
+      setToast('链接已复制到剪贴板');
+      setTimeout(() => setToast(''), 2000);
+    });
+  }, [templateId, resumeData]);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
       {/* Toolbar */}
@@ -156,19 +180,49 @@ function App() {
             ))}
           </div>
         </div>
-        <button
-          onClick={handleExportPdf}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            padding: '6px 14px', borderRadius: '6px', border: 'none',
-            background: '#fafafa', color: '#18181b',
-            fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-            fontFamily: '"JetBrains Mono", monospace',
-            transition: 'all 0.15s',
-          }}
-        >
-          下载 PDF
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
+            onClick={handleShareLink}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', borderRadius: '6px',
+              border: '1px solid #3f3f46',
+              background: 'transparent', color: '#a1a1aa',
+              fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+              fontFamily: '"JetBrains Mono", monospace',
+              transition: 'all 0.15s',
+            }}
+          >
+            分享链接
+          </button>
+          <button
+            onClick={handleExportHtml}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', borderRadius: '6px',
+              border: '1px solid #3f3f46',
+              background: 'transparent', color: '#a1a1aa',
+              fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+              fontFamily: '"JetBrains Mono", monospace',
+              transition: 'all 0.15s',
+            }}
+          >
+            导出 HTML
+          </button>
+          <button
+            onClick={handleExportPdf}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '6px 14px', borderRadius: '6px', border: 'none',
+              background: '#fafafa', color: '#18181b',
+              fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+              fontFamily: '"JetBrains Mono", monospace',
+              transition: 'all 0.15s',
+            }}
+          >
+            下载 PDF
+          </button>
+        </div>
       </div>
 
       {/* Workspace */}
@@ -218,6 +272,19 @@ function App() {
           </div>
         </div>
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
+          padding: '8px 20px', borderRadius: '8px',
+          background: '#18181b', color: '#fafafa', border: '1px solid #3f3f46',
+          fontSize: '13px', fontFamily: '"JetBrains Mono", monospace',
+          zIndex: 9999,
+        }}>
+          {toast}
+        </div>
+      )}
     </div>
   );
 }
