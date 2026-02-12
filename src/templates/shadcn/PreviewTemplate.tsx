@@ -1,5 +1,7 @@
 import { useState } from "react";
 import type { ResumeData } from "../../types/resume";
+import { t } from '../../i18n';
+import type { Locale } from '../../i18n';
 import {
   GithubIcon, GlobeIcon, PhoneIcon, MailIcon,
   BriefcaseIcon, GraduationCapIcon, UserIcon, ZapIcon,
@@ -56,7 +58,7 @@ function ContactChipDark({ icon, text, href }: { icon: React.ReactNode; text: st
   );
 }
 
-export default function ShadcnPreview({ data }: { data: ResumeData }) {
+export default function ShadcnPreview({ data, locale = 'en' }: { data: ResumeData; locale?: Locale }) {
   const d = data;
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [hoveredExp, setHoveredExp] = useState<number | null>(null);
@@ -145,7 +147,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
           {/* Summary */}
           {d.summary && (
             <div className="section-block" style={{ marginBottom: "28px", animationDelay: "0.1s" }}>
-              <SectionHeader icon={<UserIcon />} title="个人简介" />
+              <SectionHeader icon={<UserIcon />} title={t('summary', locale)} />
               <p style={{ fontSize: "13.5px", lineHeight: 1.75, color: "#3f3f46", paddingLeft: "36px" }}>
                 {d.summary}
               </p>
@@ -155,7 +157,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
           {/* Projects */}
           {d.projects && d.projects.length > 0 && (
             <div className="section-block" style={{ marginBottom: "28px", animationDelay: "0.2s" }}>
-              <SectionHeader icon={<FolderIcon />} title="项目经历" />
+              <SectionHeader icon={<FolderIcon />} title={t('projects', locale)} />
               <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingLeft: "36px" }}>
                 {d.projects.map((proj, i) => (
                   <div key={i}
@@ -194,14 +196,14 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
                     )}
                     {proj.techStack && (
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
-                        {proj.techStack.map((t, k) => (
+                        {proj.techStack.map((tech, k) => (
                           <span key={k} style={{
                             display: "inline-flex", alignItems: "center", padding: "2px 8px",
                             borderRadius: "4px", fontSize: "11px", fontWeight: 500,
                             fontFamily: '"JetBrains Mono", monospace',
                             background: "#f4f4f5", color: "#52525b", border: "1px solid #e4e4e7",
                           }}>
-                            {t}
+                            {tech}
                           </span>
                         ))}
                       </div>
@@ -215,7 +217,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
           {/* Experience */}
           {d.experience && d.experience.length > 0 && (
             <div className="section-block" style={{ marginBottom: "28px", animationDelay: "0.3s" }}>
-              <SectionHeader icon={<BriefcaseIcon />} title="工作经历" />
+              <SectionHeader icon={<BriefcaseIcon />} title={t('experience', locale)} />
               <div style={{ display: "flex", flexDirection: "column", gap: "20px", paddingLeft: "36px" }}>
                 {d.experience.map((exp, i) => (
                   <div key={i}
@@ -267,7 +269,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
           {/* Education */}
           {d.education && d.education.length > 0 && (
             <div className="section-block" style={{ marginBottom: "28px", animationDelay: "0.4s" }}>
-              <SectionHeader icon={<GraduationCapIcon />} title="教育经历" />
+              <SectionHeader icon={<GraduationCapIcon />} title={t('education', locale)} />
               <div style={{ paddingLeft: "36px", display: "flex", flexDirection: "column", gap: "10px" }}>
                 {d.education.map((edu, i) => (
                   <div key={i} style={{
@@ -294,7 +296,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
           {/* Skills */}
           {d.skills && d.skills.length > 0 && (
             <div className="section-block" style={{ animationDelay: "0.5s" }}>
-              <SectionHeader icon={<ZapIcon />} title="技能" />
+              <SectionHeader icon={<ZapIcon />} title={t('skills', locale)} />
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", paddingLeft: "36px" }}>
                 {d.skills.map((skill, i) => (
                   <span key={i} style={{
@@ -316,7 +318,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
           {/* Appendix */}
           {d.appendix && d.appendix.length > 0 && (
             <div className="section-block" style={{ marginTop: "28px", animationDelay: "0.6s" }}>
-              <SectionHeader icon={<PaperclipIcon />} title="附录" />
+              <SectionHeader icon={<PaperclipIcon />} title={t('appendix', locale)} />
               <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingLeft: "36px" }}>
                 {d.appendix.map((item, i) => (
                   <div key={i} style={{ borderRadius: "8px", border: "1px solid #e4e4e7", overflow: "hidden", background: "#fff" }}>
@@ -326,7 +328,7 @@ export default function ShadcnPreview({ data }: { data: ResumeData }) {
                     }}>
                       <div>
                         <h4 style={{ fontSize: "13.5px", fontWeight: 600, color: "#18181b", margin: 0 }}>
-                          附录 {String.fromCharCode(65 + i)}：{item.title}
+                          {t('appendix', locale)} {String.fromCharCode(65 + i)}: {item.title}
                         </h4>
                         {item.description && <p style={{ fontSize: "12px", color: "#a1a1aa", margin: "2px 0 0" }}>{item.description}</p>}
                       </div>

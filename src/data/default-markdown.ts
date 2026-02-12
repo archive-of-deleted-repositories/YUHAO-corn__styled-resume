@@ -1,4 +1,4 @@
-import { locale } from '../i18n';
+import type { Locale } from '../i18n';
 
 const ZH_MARKDOWN = `---
 name: 张三
@@ -144,4 +144,8 @@ System architecture overview showing core module interactions
 Key business metrics dashboard with growth curves
 `;
 
-export const DEFAULT_MARKDOWN = locale === 'zh' ? ZH_MARKDOWN : EN_MARKDOWN;
+export function getDefaultMarkdown(locale: Locale): string {
+  return locale === 'zh' ? ZH_MARKDOWN : EN_MARKDOWN;
+}
+
+export const DEFAULT_MARKDOWN = ZH_MARKDOWN;

@@ -1,14 +1,20 @@
 import type { ComponentType } from "react";
 import type { ResumeData } from "../types/resume";
+import type { Locale } from "../i18n";
 import ShadcnPreview from "./shadcn/PreviewTemplate";
 import ClaudePreview from "./claude/PreviewTemplate";
 import TerminalPreview from "./terminal/PreviewTemplate";
 import EditorialPreview from "./editorial/PreviewTemplate";
 
+export interface TemplateProps {
+  data: ResumeData;
+  locale?: Locale;
+}
+
 export interface Template {
   id: string;
   name: string;
-  component: ComponentType<{ data: ResumeData }>;
+  component: ComponentType<TemplateProps>;
   disabled?: boolean;
 }
 

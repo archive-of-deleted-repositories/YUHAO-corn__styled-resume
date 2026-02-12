@@ -1,4 +1,6 @@
 import type { ResumeData } from "../../types/resume";
+import { t } from '../../i18n';
+import type { Locale } from '../../i18n';
 
 function Tag({ children, dark }: { children: string; dark?: boolean }) {
   return <span className={`ed-tag${dark ? " ed-tag--dark" : ""}`}>{children}</span>;
@@ -16,7 +18,7 @@ function TechRow({ items }: { items: string[] }) {
   if (!items.length) return null;
   return (
     <div className="ed-tech-row">
-      {items.map((t, i) => <span key={i} className="ed-tech-chip">{t}</span>)}
+      {items.map((tech, i) => <span key={i} className="ed-tech-chip">{tech}</span>)}
     </div>
   );
 }
@@ -27,7 +29,7 @@ function ContactItem({ icon, href, children }: { icon: string; href?: string; ch
   return <span className="ed-contact-item">{inner}</span>;
 }
 
-export default function EditorialPreview({ data }: { data: ResumeData }) {
+export default function EditorialPreview({ data, locale = 'en' }: { data: ResumeData; locale?: Locale }) {
   const h = data.header;
   const SPANS = { pair: [7, 5], pairFlip: [5, 7] };
 
@@ -132,7 +134,7 @@ export default function EditorialPreview({ data }: { data: ResumeData }) {
         <div className="ed-section">
           <div className="ed-card ed-card--hero ed-span-8">
             <Tag dark>Profile</Tag>
-            <div className="ed-hero__headline">求职意向</div>
+            <div className="ed-hero__headline">{t('jobIntention', locale)}</div>
             <div className="ed-hero__name">{h.title}</div>
             {h.status && (
               <div className="ed-hero__badge"><span className="ed-hero__badge-dot" />{h.status}</div>
@@ -182,9 +184,9 @@ export default function EditorialPreview({ data }: { data: ResumeData }) {
                   <Tag>Education</Tag>
                   <div className="ed-edu__school">{edu.school}</div>
                   <div className="ed-edu-rows">
-                    <div className="ed-edu-row"><span className="ed-edu-key">学位</span><span className="ed-edu-val">{edu.degree}</span></div>
-                    <div className="ed-edu-row"><span className="ed-edu-key">专业</span><span className="ed-edu-val">{edu.major}</span></div>
-                    <div className="ed-edu-row"><span className="ed-edu-key">时间</span><span className="ed-edu-val">{edu.period}</span></div>
+                    <div className="ed-edu-row"><span className="ed-edu-key">{t('degree', locale)}</span><span className="ed-edu-val">{edu.degree}</span></div>
+                    <div className="ed-edu-row"><span className="ed-edu-key">{t('major', locale)}</span><span className="ed-edu-val">{edu.major}</span></div>
+                    <div className="ed-edu-row"><span className="ed-edu-key">{t('period', locale)}</span><span className="ed-edu-val">{edu.period}</span></div>
                   </div>
                 </div>
               );

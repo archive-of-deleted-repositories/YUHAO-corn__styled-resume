@@ -1,14 +1,16 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { templates, getTemplate } from './templates/registry';
 import { parseMarkdown } from './parser/markdown-parser';
-import { DEFAULT_MARKDOWN } from './data/default-markdown';
+import { DEFAULT_MARKDOWN, getDefaultMarkdown } from './data/default-markdown';
 import { isViewMode, decodeShareUrl, encodeShareUrl } from './utils/share';
 import { exportHtml } from './utils/export-html';
-import { t } from './i18n';
+import { t, detectLocale } from './i18n';
+import type { Locale } from './i18n';
 import ViewMode from './components/ViewMode';
 
 const STORAGE_KEY = 'styled-resume:markdown';
 const TEMPLATE_KEY = 'styled-resume:template';
+const LOCALE_KEY = 'styled-resume:locale';
 
 function loadMarkdown() {
   try {
@@ -30,6 +32,9 @@ function App() {
     () => localStorage.getItem(TEMPLATE_KEY) || 'shadcn'
   );
   const [toast, setToast] = useState('');
+  const [locale, setLocale] = useState<Locale>(
+    () => (localStorage.getItem(LOCALE_KEY) as Locale) || detectLocale()
+  );
   const previewRef = useRef<HTMLDivElement>(null);
 
   const template = getTemplate(templateId);
@@ -56,6 +61,20 @@ function App() {
   useEffect(() => {
     try { localStorage.setItem(TEMPLATE_KEY, templateId); } catch {}
   }, [templateId]);
+
+  useEffect(() => {
+    try { localStorage.setItem(LOCALE_KEY, locale); } catch {}
+  }, [locale]);
+
+  const handleToggleLocale = useCallback(() => {
+    const next: Locale = locale === 'zh' ? 'en' : 'zh';
+    // Smart switch: if content is default, swap to new locale's default
+    const currentDefault = getDefaultMarkdown(locale);
+    if (markdown === currentDefault) {
+      setMarkdown(getDefaultMarkdown(next));
+    }
+    setLocale(next);
+  }, [locale, markdown]);
 
   const handleExportPdf = useCallback(() => {
     if (!previewRef.current) return;
@@ -139,7 +158,7 @@ function App() {
   const handleShareLink = useCallback(() => {
     const url = encodeShareUrl(templateId, resumeData);
     navigator.clipboard.writeText(url).then(() => {
-      setToast(t('linkCopied'));
+      setToast(t('linkCopied', locale));
       setTimeout(() => setToast(''), 2000);
     });
   }, [templateId, resumeData]);
@@ -183,6 +202,19 @@ function App() {
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
+            onClick={handleToggleLocale}
+            style={{
+              padding: '3px 10px', borderRadius: '4px',
+              border: '1px solid #3f3f46',
+              background: 'transparent', color: '#a1a1aa',
+              fontSize: '11px', fontWeight: 600, cursor: 'pointer',
+              fontFamily: '"JetBrains Mono", monospace',
+              transition: 'all 0.15s',
+            }}
+          >
+            {locale === 'zh' ? 'EN' : '中'}
+          </button>
+          <button
             onClick={handleShareLink}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -194,7 +226,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            {t('shareLink')}
+            {t('shareLink', locale)}
           </button>
           <button
             onClick={handleExportHtml}
@@ -208,7 +240,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            {t('exportHtml')}
+            {t('exportHtml', locale)}
           </button>
           <button
             onClick={handleExportPdf}
@@ -221,7 +253,7 @@ function App() {
               transition: 'all 0.15s',
             }}
           >
-            {t('exportPdf')}
+            {t('exportPdf', locale)}
           </button>
         </div>
       </div>
@@ -241,13 +273,13 @@ function App() {
               fontSize: '13px', fontWeight: 600, color: '#a1a1aa',
               fontFamily: '"JetBrains Mono", monospace',
             }}>
-              {t('editorLabel')}
+              {t('editorLabel', locale)}
             </span>
             <span style={{
               fontSize: '11px', color: '#52525b',
               fontFamily: '"JetBrains Mono", monospace',
             }}>
-              {t('charCount', { n: charCount })}
+              {t('charCount', locale, { n: charCount })}
             </span>
           </div>
           <textarea
@@ -269,7 +301,7 @@ function App() {
           width: '50%', overflow: 'auto', background: '#f4f4f5',
         }}>
           <div ref={previewRef}>
-            <PreviewComponent data={resumeData} />
+            <PreviewComponent data={resumeData} locale={locale} />
           </div>
         </div>
       </div>

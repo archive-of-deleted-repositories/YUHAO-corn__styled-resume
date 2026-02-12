@@ -1,4 +1,6 @@
 import type { ResumeData } from "../../types/resume";
+import { t } from '../../i18n';
+import type { Locale } from '../../i18n';
 
 const claudeLogo = `<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>`;
 
@@ -38,7 +40,7 @@ const icons = {
   mail: `<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>`,
 };
 
-export default function ClaudePreview({ data }: { data: ResumeData }) {
+export default function ClaudePreview({ data, locale = 'en' }: { data: ResumeData; locale?: Locale }) {
   const d = data;
   return (
     <div className="cl-root">
@@ -76,7 +78,7 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
         {/* Summary */}
         {d.summary && (
           <div className="cl-block cl-msg-claude">
-            <SectionLabel title="个人简介" />
+            <SectionLabel title={t('summary', locale)} />
             <p className="cl-bio-text">{d.summary}</p>
           </div>
         )}
@@ -87,7 +89,7 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
             <UserBubble text="有什么代表性项目吗？" />
             <div className="cl-block cl-msg-claude">
               <ClaudeAvatar />
-              <SectionLabel title="项目经历" />
+              <SectionLabel title={t('projects', locale)} />
               {d.projects.map((proj, i) => (
                 <div key={i} className="cl-project-card">
                   <div className="cl-project-header">
@@ -106,7 +108,7 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
                   )}
                   {proj.techStack && (
                     <div className="cl-tech-stack">
-                      {proj.techStack.map((t, k) => <span key={k} className="cl-tech-tag">{t}</span>)}
+                      {proj.techStack.map((tech, k) => <span key={k} className="cl-tech-tag">{tech}</span>)}
                     </div>
                   )}
                 </div>
@@ -118,10 +120,10 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
         {/* Experience */}
         {d.experience && d.experience.length > 0 && (
           <>
-            <UserBubble text="工作经历呢？" />
+            <UserBubble text={t('askExperience', locale)} />
             <div className="cl-block cl-msg-claude">
               <ClaudeAvatar />
-              <SectionLabel title="工作经历" />
+              <SectionLabel title={t('experience', locale)} />
               {d.experience.map((exp, i) => (
                 <div key={i} className="cl-work-item">
                   <div className="cl-work-top">
@@ -144,7 +146,7 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
         {/* Education */}
         {d.education && d.education.length > 0 && (
           <div className="cl-block cl-msg-claude">
-            <SectionLabel title="教育经历" />
+            <SectionLabel title={t('education', locale)} />
             {d.education.map((edu, i) => (
               <div key={i} className="cl-edu-item">
                 <div>
@@ -160,7 +162,7 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
         {/* Skills */}
         {d.skills && d.skills.length > 0 && (
           <div className="cl-block cl-msg-claude">
-            <SectionLabel title="技能" />
+            <SectionLabel title={t('skills', locale)} />
             <div className="cl-skills-grid">
               {d.skills.map((skill, i) => <span key={i} className="cl-skill-pill">{skill}</span>)}
             </div>
@@ -173,7 +175,7 @@ export default function ClaudePreview({ data }: { data: ResumeData }) {
             <UserBubble text="有没有想展示的附加材料？" />
             <div className="cl-block cl-msg-claude">
               <ClaudeAvatar />
-              <SectionLabel title="附录" />
+              <SectionLabel title={t('appendix', locale)} />
               {d.appendix.map((item, i) => (
                 <div key={i} className="cl-appendix-card">
                   {item.imageUrl ? (

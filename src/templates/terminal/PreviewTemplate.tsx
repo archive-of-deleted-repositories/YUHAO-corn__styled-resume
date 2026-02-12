@@ -1,4 +1,6 @@
 import type { ResumeData } from "../../types/resume";
+import { t } from '../../i18n';
+import type { Locale } from '../../i18n';
 
 function Prompt({ path, cmd, args, flags }: { path: string; cmd: string; args?: string; flags?: string }) {
   return (
@@ -20,7 +22,7 @@ function SectionHeader({ title }: { title: string }) {
   return <div className="tm-section-header">[ {title} ]</div>;
 }
 
-export default function TerminalPreview({ data }: { data: ResumeData }) {
+export default function TerminalPreview({ data, locale = 'en' }: { data: ResumeData; locale?: Locale }) {
   const d = data;
   return (
     <div className="tm-root">
@@ -82,7 +84,7 @@ export default function TerminalPreview({ data }: { data: ResumeData }) {
               <hr className="tm-divider" />
               <Prompt path="~/projects" cmd="ls" flags="-la" />
               <div className="tm-output">
-                <SectionHeader title="项目经历" />
+                <SectionHeader title={t('projects', locale)} />
                 {d.projects.map((proj, i) => (
                   <div key={i} className="tm-card">
                     <div className="tm-card-title">{proj.name}</div>
@@ -100,7 +102,7 @@ export default function TerminalPreview({ data }: { data: ResumeData }) {
                     )}
                     {proj.techStack && proj.techStack.length > 0 && (
                       <div className="tm-tags">
-                        {proj.techStack.map((t, k) => <span key={k} className="tm-tag">{t}</span>)}
+                        {proj.techStack.map((tech, k) => <span key={k} className="tm-tag">{tech}</span>)}
                       </div>
                     )}
                   </div>
@@ -115,7 +117,7 @@ export default function TerminalPreview({ data }: { data: ResumeData }) {
               <hr className="tm-divider" />
               <Prompt path="~/experience" cmd="git" args="log" flags="--oneline" />
               <div className="tm-output">
-                <SectionHeader title="工作经历" />
+                <SectionHeader title={t('experience', locale)} />
                 {d.experience.map((exp, i) => (
                   <div key={i} className="tm-card">
                     <div className="tm-card-title">{exp.company}</div>
@@ -141,7 +143,7 @@ export default function TerminalPreview({ data }: { data: ResumeData }) {
               <hr className="tm-divider" />
               <Prompt path="~/education" cmd="cat" args="degree.txt" />
               <div className="tm-output">
-                <SectionHeader title="教育经历" />
+                <SectionHeader title={t('education', locale)} />
                 {d.education.map((edu, i) => (
                   <div key={i} className="tm-card">
                     <div className="tm-card-title">{edu.school}</div>
@@ -175,7 +177,7 @@ export default function TerminalPreview({ data }: { data: ResumeData }) {
               <hr className="tm-divider" />
               <Prompt path="~/appendix" cmd="open" args="attachments/" />
               <div className="tm-output">
-                <SectionHeader title="附录" />
+                <SectionHeader title={t('appendix', locale)} />
                 {d.appendix.map((item, i) => (
                   <div key={i} className="tm-card">
                     <div className="tm-card-title">{item.title}</div>
