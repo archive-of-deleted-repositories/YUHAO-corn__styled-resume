@@ -6,8 +6,8 @@ import { isViewMode, decodeShareUrl, encodeShareUrl } from './utils/share';
 import { exportHtml } from './utils/export-html';
 import ViewMode from './components/ViewMode';
 
-const STORAGE_KEY = 'md-resume:markdown';
-const TEMPLATE_KEY = 'md-resume:template';
+const STORAGE_KEY = 'styled-resume:markdown';
+const TEMPLATE_KEY = 'styled-resume:template';
 
 function loadMarkdown() {
   try {
@@ -157,7 +157,7 @@ function App() {
             fontFamily: '"JetBrains Mono", monospace',
             letterSpacing: '-0.02em',
           }}>
-            md-resume
+            styled-resume
           </span>
           <div style={{ display: 'flex', gap: '4px', padding: '2px', borderRadius: '6px', background: '#27272a' }}>
             {templates.map((t) => (

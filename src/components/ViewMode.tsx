@@ -34,7 +34,7 @@ export default function ViewMode({ templateId, data }: ViewModeProps) {
           href={window.location.origin + window.location.pathname}
           style={{ color: '#71717a', textDecoration: 'none' }}
         >
-          使用 md-resume 制作你的简历
+          使用 styled-resume 制作你的简历
         </a>
       </footer>
     </div>

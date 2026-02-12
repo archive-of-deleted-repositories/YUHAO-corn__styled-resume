@@ -1,7 +1,14 @@
 {
-  "name": "temp-scaffold",
-  "private": true,
-  "version": "0.0.0",
+  "name": "styled-resume",
+  "version": "0.1.0",
+  "description": "A markdown-based resume editor with beautifully designed templates, PDF/HTML export, and shareable links.",
+  "author": "YUHAO-corn",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YUHAO-corn/styled-resume"
+  },
+  "keywords": ["resume", "cv", "markdown", "template", "pdf", "react", "vite"],
   "type": "module",
   "scripts": {
     "dev": "vite",
