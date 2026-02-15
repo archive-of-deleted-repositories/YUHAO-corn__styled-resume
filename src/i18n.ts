@@ -37,7 +37,7 @@ const messages: Record<Locale, Record<string, string>> = {
     // UI
     exportPdf: 'PDF',
     exportHtml: 'HTML',
-    shareLink: 'Share',
+    shareLink: 'Copy Link',
     linkCopied: 'Link copied to clipboard',
     editorLabel: 'resume.md',
     charCount: '{n} chars',
