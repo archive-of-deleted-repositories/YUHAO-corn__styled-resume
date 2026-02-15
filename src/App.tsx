@@ -94,7 +94,7 @@ function App() {
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   @page {
-    size: 210mm 297mm;
+    size: 210mm 9999mm;
     margin: 0;
   }
 
@@ -139,8 +139,13 @@ function App() {
 
     const triggerPrint = () => {
       // 量出内容实际高度，动态设置页面尺寸，实现单页连续 PDF
-      const contentHeight = printWindow.document.body.scrollHeight;
-      const heightMm = Math.ceil(contentHeight * 25.4 / 96) + 1; // px → mm，+1 防止四舍五入截断
+      const body = printWindow.document.body;
+      const docEl = printWindow.document.documentElement;
+      const contentHeight = Math.max(
+        body.scrollHeight, body.offsetHeight,
+        docEl.scrollHeight, docEl.offsetHeight
+      );
+      const heightMm = Math.ceil(contentHeight * 25.4 / 96) + 5; // px → mm，+5 防止四舍五入截断
       const pageStyle = printWindow.document.createElement('style');
       pageStyle.textContent = `@page { size: 210mm ${heightMm}mm; margin: 0; }`;
       printWindow.document.head.appendChild(pageStyle);
