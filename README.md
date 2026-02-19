@@ -18,14 +18,12 @@ Write in Markdown. Get a beautifully designed resume.
 
 ### Preview
 
-<!-- TODO: Replace with actual screenshots -->
-<!-- ![styled-resume preview](docs/screenshots/overview.png) -->
+![styled-resume overview](docs/screenshots/overview.png)
 
 | Shadcn | Claude | Terminal | Editorial |
 |--------|--------|----------|-----------|
+| ![Shadcn](docs/screenshots/Shadcn.png) | ![Claude](docs/screenshots/Claude.png) | ![Terminal](docs/screenshots/Terminal.png) | ![Editorial](docs/screenshots/Editorial.png) |
 | Clean & minimal | Warm & professional | Retro hacker | Newspaper editorial |
-
-> Screenshots coming soon. Run locally to see all 4 templates in action.
 
 ### What is this?
 
@@ -78,14 +76,12 @@ React · Vite · TypeScript · Tailwind CSS · lz-string
 
 ### 预览
 
-<!-- TODO: 替换为实际截图 -->
-<!-- ![styled-resume 预览](docs/screenshots/overview.png) -->
+![styled-resume 概览](docs/screenshots/overview.png)
 
 | Shadcn | Claude | Terminal | Editorial |
 |--------|--------|----------|-----------|
+| ![Shadcn](docs/screenshots/Shadcn.png) | ![Claude](docs/screenshots/Claude.png) | ![Terminal](docs/screenshots/Terminal.png) | ![Editorial](docs/screenshots/Editorial.png) |
 | 简洁极简 | 温暖专业 | 复古黑客 | 报纸编辑 |
-
-> 截图即将补充。先 clone 到本地跑起来看效果。
 
 ### 这是什么？
 
