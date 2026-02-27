@@ -1,6 +1,8 @@
 # styled-resume
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/YUHAO-corn/styled-resume?style=social)](https://github.com/YUHAO-corn/styled-resume/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/YUHAO-corn/styled-resume?style=social)](https://github.com/YUHAO-corn/styled-resume/network/members)
 [![React](https://img.shields.io/badge/React-19-61dafb.svg)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6.svg)](https://www.typescriptlang.org)
 
@@ -66,6 +68,10 @@ Write your resume in markdown following a simple structure (name, title, experie
 
 React · Vite · TypeScript · Tailwind CSS · lz-string
 
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=YUHAO-corn/styled-resume&type=Date)](https://star-history.com/#YUHAO-corn/styled-resume&Date)
+
 ---
 
 <a id="中文"></a>
@@ -123,6 +129,10 @@ Markdown  →  解析器  →  模板渲染  →  PDF / HTML / 分享链接
 ### 技术栈
 
 React · Vite · TypeScript · Tailwind CSS · lz-string
+
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=YUHAO-corn/styled-resume&type=Date)](https://star-history.com/#YUHAO-corn/styled-resume&Date)
 
 ---
 
